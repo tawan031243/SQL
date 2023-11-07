@@ -1,7 +1,7 @@
---START LEANING BASIC SQL
+--START LEARNING BASIC SQL
 
 --Create employee table
-CREATE TABLe employee (
+CREATE TABLE employee (
     id INT PRIMARY KEY UNIQUE,
     name TEXT,
     department TEXT,
@@ -9,10 +9,10 @@ CREATE TABLe employee (
     salary REAL --float
 );
 
---Insert employee detail into employee table
+--Insert employee details into employee table
 INSERT INTO employee VALUES 
     (1, 'David', 'Marketing', 'CEO', 100000),
-    (2, 'John' , 'Marketing', 'VP', 85000 ),
+    (2, 'John', 'Marketing', 'VP', 85000 ),
     (3, 'Marry', 'Sales', 'Manager', 60000);
 
 --Show all data in employee table
@@ -69,7 +69,7 @@ WHERE id = 1;
 
 SELECT * FROM employee;
 
---Delete some record in the table
+--Delete some records in the table
 DELETE FROM employee
 WHERE id IN (2,5);
 
@@ -80,7 +80,7 @@ SELECT * FROM employee;
 
 --Change table name
 ALTER TABLE employee
-RENAME to myemployee; --RENAME = change name
+RENAME TO myemployee; --RENAME = change name
 
 SELECT * from myemployee;
 
@@ -96,15 +96,15 @@ SET email = CONCAT(LOWER(name),'_',LOWER(position),'@company.com'); --CONCAT = c
 
 SELECT * from myemployee;
 
---Create new table from previous table
-CREATE TABLE myemployee_backup as
+--Create a new table from the previous table
+CREATE TABLE myemployee_backup AS
   SELECT * FROM myemployee;
 
 SELECT * FROM myemployee;
 
 --Delete the table
-DROP table myemployee_backup;
+DROP TABLE myemployee_backup;
 
-DROp TABLE myemployee;
+DROP TABLE myemployee;
 
 --END
