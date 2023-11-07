@@ -1,0 +1,194 @@
+--START LEARN SQL 102
+
+--How to use WHERE clause
+SELECT * FROM customers
+WHERE country = 'USA';
+
+--AND operator -> true if both conditions are true
+SELECT * FROM customers
+WHERE country = 'USA' AND state = 'CA';
+
+--OR operator -> true if one of the conditions is true
+SELECT * FROM customers
+WHERE country = 'USA' OR country = 'United Kingdom';
+
+--IN operator -> true if the value is in the list
+SELECT * FROM customers
+WHERE country IN ('USA', 'United Kingdom');
+
+--NOT IN operator -> true if the value is not in the list
+SELECT * FROM customers
+WHERE country NOT IN ('USA', 'United Kingdom');
+
+--LIKE operator -> true if the value contains the pattern
+SELECT * FROM customers
+WHERE email LIKE '%@gmail.com';
+
+--NOT LIKE operator -> true if the value does not contain the pattern
+SELECT * FROM customers
+WHERE email NOT LIKE '%gmail.com';
+
+--IS NULL operator -> true if the value is NULL
+SELECT * FROM customers
+WHERE company IS NULL;
+
+--IS NOT NULL operator -> true if the value is NOT NULL
+SELECT * FROM customers
+WHERE company IS NOT NULL;
+
+--BETWEEN operator -> true if the value is between the range
+SELECT * FROM customers
+WHERE customerid BETWEEN 10 AND 15;
+
+--AND, OR operators in IN operator
+SELECT * FROM customers
+WHERE NOT (country = 'USA' OR country = 'Canada' OR country = 'France');
+
+SELECT * FROM customers
+WHERE country IN ('Brazil', 'Germany', 'Norway');
+
+SELECT * FROM customers
+WHERE country NOT IN ('Brazil', 'Germany', 'Norway');
+
+SELECT * FROM customers
+WHERE customerid BETWEEN 5 AND 10;
+
+SELECT invoicedate FROM invoices
+WHERE invoicedate BETWEEN '2009-01-01 00:00:00' AND '2009-01-19 00:00:00';
+
+SELECT firstname, company FROM customers
+WHERE company IS NULL;
+
+SELECT firstname, company FROM customers
+WHERE company IS NOT NULL;
+
+--Wildcard (%) for generate the text before or after the character(s)
+SELECT
+  firstname, 
+  lastname, 
+  country, 
+  email
+FROM customers
+WHERE email LIKE '%@hotmail.com' AND country = 'USA'; --% = wildcard
+
+SELECT
+  firstname, 
+  lastname, 
+  country, 
+  email
+FROM customers
+WHERE email NOT LIKE '%@hotmail.com' AND country = 'USA';
+
+SELECT
+  firstname, 
+  lastname, 
+  country, 
+  email,
+  phone
+FROM customers
+WHERE phone LIKE '%99%';
+
+--Underscore is a wildcard for any character
+SELECT
+  firstname, 
+  lastname, 
+  country, 
+  email
+FROM customers
+WHERE firstname LIKE 'J_hn';
+
+--COALESCE insert texts instead null
+SELECT 
+  company,
+  COALESCE(company, 'End Customer') AS company_clean,
+    CASE
+      WHEN company IS NULL THEN 'End Customer'
+      ELSE 'Corporate'
+    END AS segment
+FROM customers;
+
+--Normal JOIN ON
+SELECT 
+  ar.artistid,
+  ar.Name AS artist_name,
+  al.Title AS album_name,
+  tr.name AS song_name
+FROM artists AS ar
+JOIN albums AS al
+ON ar.ArtistId = al.artistid
+JOIN tracks as tr
+ON al.AlbumId = tr.AlbumId
+WHERE ar.ArtistId = al.artistid AND ar.ArtistId IN (8, 100, 120);
+
+--JOIN by WHERE clause
+SELECT 
+  ar.artistid,
+  ar.Name AS artist_name,
+  al.Title AS album_name,
+  tr.name AS song_name
+FROM artists AS ar, albums AS al, tracks as tr
+WHERE ar.ArtistId = al.artistid 
+  AND al.AlbumId = tr.AlbumId
+  AND ar.ArtistId IN (8, 100, 120);
+
+--5 common aggregate functions
+SELECT 
+  --name,
+  ROUND(AVG(milliseconds),2) AS avg_mill,
+  SUM(milliseconds) AS sum_mill,
+  MIN(milliseconds) AS min_mill,
+  MAX(milliseconds) AS max_mill,
+  COUNT(milliseconds) AS count_mill
+FROM tracks
+--GROUP BY name;
+
+--Normal SELECT
+SELECT
+  country
+FROM customers;
+
+--DISTINCT = Unique values in rows 
+SELECT
+  DISTINCT country
+FROM customers;
+
+--COUNT+DISTINCT = Count the unique values in rows
+SELECT
+  COUNT(DISTINCT country)
+FROM customers;
+
+--Aggregate and GROUP BY
+SELECT 
+  country, 
+  COUNT(*) AS count_country 
+FROM customers
+GROUP BY country;
+
+SELECT 
+  ge.name, 
+  count(*) AS count_song 
+FROM genres AS ge, tracks AS tr
+WHERE ge.GenreId = tr.GenreId
+GROUP BY ge.name;
+
+--HAVING function -> use after GROUP BY only
+SELECT 
+  ge.name, 
+  count(*) AS count_song 
+FROM genres AS ge, tracks AS tr
+WHERE ge.GenreId = tr.GenreId
+GROUP BY ge.name
+HAVING count(*) >= 100;
+
+--ORDER BY function -> use for sort data
+SELECT 
+  ge.Name,
+  count(*)
+FROM genres AS ge, tracks AS tr
+WHERE ge.GenreId = tr.GenreId
+GROUP BY ge.name
+ORDER BY count(*) DESC
+LIMIT 5;
+--LIMIT function -> use for limit the quantity of data display
+
+--END
