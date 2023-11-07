@@ -1,0 +1,193 @@
+--START LEARN SQL 103
+
+.mode box
+--JOIN by WHERE clause
+--JOIN by WHERE clause
+SELECT 
+    ar.artistid,
+    ar.name,
+    al.title
+FROM artists AS ar, albums AS al
+WHERE ar.ArtistId = al.ArtistId
+  AND ar.name LIKE 'c%';
+
+--JOIN function
+SELECT 
+    ar.artistid,
+    ar.name,
+    al.title,
+    tr.Name
+FROM artists AS ar 
+JOIN albums AS al
+ON ar.ArtistId = al.ArtistId
+JOIN tracks AS tr
+ON tr.AlbumId = al.albumid
+WHERE ar.name LIKE 'c%';
+
+--Create the table and insert data into the table to test the inner and left join
+CREATE TABLE book_shop (
+    id INT,
+    name TEXT,
+    release_year INT
+);
+
+CREATE TABLE favourite_book (
+    id INT,
+    author TEXT,
+    review REAL
+);
+
+INSERT INTO book_shop VALUES
+    (1, 'Think Like A Freak', 2014),
+    (2, 'Ultralearning', 2019),
+    (3, 'Blue Ocean Strategy', 2015),
+    (4, 'The Power of Habit', 2012),
+    (5, 'Outlier', 2008);
+
+SELECT * FROM book_shop;
+
+INSERT INTO favourite_book VALUES
+    (1, 'Steven D. Levitt, Stephen J. Dubner', 1904),
+    (4, 'Charles Duhigg', 12007),
+    (5, 'Malcolm Gladwell', 12063);
+
+SELECT * FROM favourite_book;
+
+--INNER JOIN
+SELECT
+  *
+FROM book_shop AS bs
+INNER JOIN favourite_book AS fb
+ON bs.id = fb.id;
+
+--LEFT JOIN
+SELECT
+  *
+FROM book_shop AS bs
+LEFT JOIN favourite_book AS fb
+ON bs.id = fb.id;
+
+--Create the table and insert data into the table for CROSS JOIN
+--CROSS JOIN or Cartesian
+CREATE TABLE ranks (
+  rank TEXT
+);
+
+CREATE TABLE suits (
+  suit TEXT
+);
+
+INSERT INTO ranks VALUES
+('2'),('3'),('4'),('5'),('6'),('7'),('8'),('9'),('10'),('J'),('Q'),('K'),('A');
+
+INSERT INTO suits VALUES
+('Clubs'),('Diamonds'),('Hearts'),('Spades');
+
+--CROSS JOIN looks like a stack
+SELECT
+  *
+FROM ranks, suits
+ORDER BY 2;
+
+SELECT
+  *
+FROM ranks CROSS JOIN suits
+ORDER BY 2;
+
+--Create the table and insert data into the table for SELF JOIN
+CREATE TABLE employee (
+  id INT,
+  name TEXT,
+  level TEXT,
+  manager_id INT
+);
+
+INSERT INTO employee VALUES
+(1, 'David', 'CEO', NULL),
+(2, 'John', 'SVP', 1),
+(3, 'Mary', 'VP', 2),
+(4, 'Adam', 'VP', 2),
+(5, 'Scott', 'Manager', 3),
+(6, 'Louise', 'Manager', 3),
+(7, 'Kevin', 'Manager', 4),
+(8, 'Takeshi', 'Manager', 4),
+(9, 'Joe', 'AM', 6),
+(10, 'Anna', 'AM', 7);
+
+--SELF JOIN is a join in the self table
+SELECT 
+    e1.name AS staff, 
+    e1.level AS staff_lavel, 
+    e2.name AS manager, 
+    e2.level AS manager_level,
+    e1.name || ' report to ' || e2.name AS comment
+from employee AS e1, employee AS e2
+WHERE e1.manager_id = e2.id;
+
+--INTERSECT like inner join but do not create new columns
+SELECT id from book_shop
+INTERSECT
+SELECT id FROM favourite_book;
+
+--EXCEPT will return the values in the left table but the right do not have the same values
+SELECT id from book_shop
+EXCEPT
+SELECT id FROM favourite_book;
+
+--Create a table and insert data into the table for UNION and UNION ALL
+CREATE TABLE book_shop_new (
+    id INT,
+    name TEXT,
+    release_year INT
+);
+
+INSERT INTO book_shop_new VALUES
+(1, 'Think Like A Freak', 2014),
+(6, 'Business Data Science', 2020),
+(7, 'Subliminal', 2018),
+(8, 'Good Strategy Bad Strategy', 2015);
+
+--Combine table and remove duplicate
+SELECT * FROM book_shop
+UNION
+SELECT * FROM book_shop_new;
+
+--Combine table and do not remove duplicate
+SELECT * FROM book_shop
+UNION ALL
+SELECT * FROM book_shop_new;
+
+--BASIC Subquery
+--No subquery1
+SELECT 
+  * 
+FROM tracks
+ORDER BY milliseconds DESC 
+LIMIT 1;
+
+--Subquery1
+SELECT 
+  * 
+FROM tracks
+WHERE milliseconds = (SELECT MAX(milliseconds) FROM tracks);
+
+--No subquery2
+SELECT 
+  firstname, 
+  lastname, 
+  country
+FROM customers
+WHERE country = 'USA';
+
+--Subquery2
+SELECT 
+  firstname, 
+  lastname, 
+  country
+FROM (SELECT * 
+  FROM customers
+  WHERE country = 'USA');
+
+--SAME Result
+
+--END
