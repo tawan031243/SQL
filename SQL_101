@@ -1,0 +1,92 @@
+--START LEARNING SQL 101 in SQLite
+https://sqliteonline.com/
+dataset link: https://cdn.fs.teachablecdn.com/FJdAedf2Tz2TjJuyp500
+
+--Combine firstname and lastname, and make the customer emails
+SELECT
+  firstname || ' ' || lastname AS fullname,
+  LOWER(firstname) || '_' || LOWER(lastname) || '@company.com' AS email
+FROM customers
+LIMIT 10;
+
+--Aggregate data
+SELECT
+  name,
+  milliseconds,
+  ROUND(milliseconds / 60000.0,2)    AS minutes,
+  bytes,
+  ROUND(bytes / (1024 * 1024),2)     AS megabytes
+FROM tracks;
+
+--CASE functions like IF function in spreadsheets
+SELECT
+  country,
+  CASE
+    WHEN country IN ('Canada', 'USA') THEN 'America'
+    WHEN country IN ('Belgium', 'France', 'Itary') THEN 'Europe'
+    ELSE 'Other'
+  END AS region
+FROM customers;
+
+--CASE function 2
+SELECT 
+  company,
+  CASE
+    WHEN company IS NOT NULL THEN 'Corporate'
+    ELSE 'End customer'
+  END AS segment
+FROM customers;
+
+--DATETIME & STRFTIME function
+SELECT 
+  invoicedate,
+  CAST(STRFTIME('%Y',invoicedate) AS INT) AS year,
+  STRFTIME('%m',invoicedate) AS month,
+  STRFTIME('%d',invoicedate) AS day,
+  STRFTIME('%Y-%m',invoicedate) AS year_month
+FROM invoices
+WHERE year = 2010 AND month = '01';
+
+--INNER JOIN
+SELECT
+  *
+FROM artists as ar
+INNER JOIN albums AS al
+ON al.ArtistId = ar.ArtistId;
+
+--LEFT JOIN
+SELECT
+  *
+FROM artists as ar
+LEFT JOIN albums AS al
+ON al.ArtistId = ar.ArtistId;
+
+--SHOW CASE JOIN
+SELECT
+  ar.ArtistId,
+  ar.name,
+  al.title,
+  tr.name,
+  tr.composer
+FROM artists as ar
+JOIN albums AS al
+ON ar.ArtistId = al.AlbumId
+JOIN tracks as tr
+on al.AlbumId = tr.AlbumId
+WHERE ar.name = 'Aerosmith';
+
+--RANDOM function & random number 1 - 10
+SELECT 
+  name,
+    RANDOM(),
+    ABS(RANDOM() % 10) + 1
+FROM tracks
+ORDER BY RANDOM()
+LIMIT 10;
+
+--Random music name
+SELECT 
+  name
+FROM tracks
+ORDER BY RANDOM()
+LIMIT 10;
